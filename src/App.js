@@ -1,23 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function App() {
+  const [images, setImages] = useState([]);
+
+  const fetchImages = async () => {
+    const data = await fetch("https://picsum.photos/v2/list").then((res) =>
+      res.json()
+    );
+    setImages(data);
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header
+        style={{
+          padding: "50px",
+          backgroundColor: "antiquewhite",
+          fontSize: "35px",
+          fontWeight: 100,
+        }}
+      >
+        Picture Gallery
       </header>
+      <div>
+        <div style={{
+                  display: "flex",
+                  gap: "20px",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}>
+          {images.map((item) => {
+            return (
+              <div
+                key={item.id}
+              >
+                <img
+                  src={item.download_url}
+                  alt={item.author}
+                  height="400px"
+                  width="400px"
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
